@@ -270,10 +270,10 @@ mouse = [
     Click([mod], "Button2", lazy.window.bring_to_front())
 ]
 
-@hook.subscribe.startup_once
-def autostart():
-   home = os.path.expanduser('~/.config/qtile/autostart.sh')
-   subprocess.run([home])
+# @hook.subscribe.startup_once
+# def autostart():
+#    home = os.path.expanduser('~/.config/qtile/autostart.sh')
+#    subprocess.run([home])
 
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
