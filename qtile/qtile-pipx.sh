@@ -22,14 +22,22 @@ optdepends=(
   "lm-sensors" # for sensors widget
   "moc" # for moc widget
 )
- 
-# Install Wayland backend if wlroots 0.16 is available
-apt-cache show libwlroots-dev | grep -q 'Version: 0.16' && {
-  WAYLAND_BACKEND="1"
-  depends+=("libwlroots11")
-  makedepends+=("libwlroots-dev")
-  optdepends+=("xwayland")
-}
+
+
+read -p "Install Wayland backend? (y/N)" -n 1
+case "$REPLY" in 
+  y|Y)
+    if apt-cache show libwlroots-dev | grep -q 'Version: 0.16'; then
+      WAYLAND_BACKEND="1"
+      depends+=("libwlroots11")
+      makedepends+=("libwlroots-dev")
+      optdepends+=("xwayland")
+    else
+      echo "Sorry, looks like wlroots 0.16 is not available in your system's repositories."
+    fi
+    ;;
+  *) ;;
+esac
 
 mkdir -p /tmp/qtile-install
 pushd /tmp/qtile-install > /dev/null
@@ -60,10 +68,16 @@ case "$REPLY" in
   *) exit 1 ;;
 esac
 
-echo Installing dependencies...
+read -p "Install qtile-extras? (y/N)" -n 1
+case "$REPLY" in 
+  y|Y) INSTALL_EXTRAS="1" ;;
+  *) ;;
+esac
+
+echo "Installing dependencies..."
 sudo apt install -y "${depends[@]}" "${makedepends[@]}"
 [[ INSTALL_OPTDEPENDS="1" ]] && {
-  echo Installing optional dependencies...
+  echo "Installing optional dependencies..."
   sudo apt install -y "${optdepends[@]}"
 }
 
@@ -72,12 +86,14 @@ PIPX_VARS=(
   "PIPX_BIN_DIR=/usr/bin"
   "PIPX_MAN_DIR=/usr/share/man"
 )
-echo Installing qtile...
+echo "Installing qtile..."
 sudo "${PIPX_VARS[@]}" pipx install --python python3.11 --system-site-packages 'qtile[all] @ https://github.com/qtile/qtile.git'
-echo Installing qtile-extras...
-sudo "${PIPX_VARS[@]}" pipx inject qtile 'qtile-extras @ https://github.com/elparaguayo/qtile-extras.git'
+[[ INSTALL_EXTRAS="1" ]] && {
+  echo "Installing qtile-extras..."
+  sudo "${PIPX_VARS[@]}" pipx inject qtile 'qtile-extras @ https://github.com/elparaguayo/qtile-extras.git'
+}
 curl -O "https://raw.githubusercontent.com/qtile/qtile/master/libqtile/resources/default_config.py"
-echo Installing desktop files...
+echo "Installing desktop files..."
 curl -O "https://raw.githubusercontent.com/qtile/qtile/master/resources/qtile.desktop"
 sudo install -Dm644 default_config.py -t /usr/share/doc/qtile
 sudo install -Dm644 qtile.desktop -t /usr/share/xsessions
@@ -87,6 +103,5 @@ sudo install -Dm644 qtile.desktop -t /usr/share/xsessions
 }
 sudo ln -s /opt/venvs/qtile/bin/qtile /usr/bin/qtile
 
-echo Success.
+echo "Success."
 popd > /dev/null
-
