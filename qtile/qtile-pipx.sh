@@ -37,7 +37,7 @@ Runtime dependencies: ${depends[@]}
 Build dependencies: ${makedepends[@]}
 Optional dependencies: ${optdepends[@]}
 END
-read -p "Install optional dependencies (y/N)?" -n 1
+read -p "Install optional dependencies? (y/N)" -n 1
 case "$REPLY" in 
   y|Y) INSTALL_OPTDEPENDS="1" ;;
   *) ;;
@@ -51,6 +51,12 @@ END
 [[ INSTALL_OPTDEPENDS="1" ]] && cat << END
 Optional dependencies: ${optdepends[@]}
 END
+
+read -p "Proceed? (y/N)" -n 1
+case "$REPLY" in 
+  y|Y) ;;
+  *) exit 1 ;;
+esac
 
 echo Installing dependencies...
 sudo apt install -y "${depends[@]}" "${makedepends[@]}"
