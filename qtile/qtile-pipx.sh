@@ -28,10 +28,10 @@ WAYLAND_BACKEND="NO"
 INSTALL_OPTDEPENDS="NO"
 INSTALL_EXTRAS="NO"
 
-read -p "Install Wayland backend? (y/N)" -n 1 -r
-case "$REPLY" in 
-  y|Y)
-    if apt-cache show libwlroots-dev | grep -q 'Version: 0.16'; then
+read -p "Install Wayland backend? (y/N)" -r
+case "$REPLY" in
+  y* | Y*)
+    if apt-cache show libwlroots11 | grep -q 'Version: 0.16'; then
       WAYLAND_BACKEND="YES"
       depends+=("libwlroots11")
       makedepends+=("libwlroots-dev")
@@ -48,15 +48,15 @@ Runtime dependencies: ${depends[@]}
 Build dependencies: ${makedepends[@]}
 Optional dependencies: ${optdepends[@]}
 END
-read -p "Install optional dependencies? (y/N)" -n 1 -r
-case "$REPLY" in 
-  y|Y) INSTALL_OPTDEPENDS="YES" ;;
+read -p "Install optional dependencies? (y/N)" -r
+case "$REPLY" in
+  y* | Y*) INSTALL_OPTDEPENDS="YES" ;;
   *) ;;
 esac
 
-read -p "Install qtile-extras? (y/N)" -n 1 -r
-case "$REPLY" in 
-  y|Y) INSTALL_EXTRAS="YES" ;;
+read -p "Install qtile-extras? (y/N)" -r
+case "$REPLY" in
+  y* | Y*) INSTALL_EXTRAS="YES" ;;
   *) ;;
 esac
 
@@ -76,8 +76,8 @@ Install optional dependencies: $INSTALL_OPTDEPENDS
 Install qtile-extras: $INSTALL_EXTRAS
 END
 
-read -p "Proceed? (y/N)" -n 1 -r
-case "$REPLY" in 
+read -p "Proceed? (y/N)" -r
+case "$REPLY" in
   y|Y) ;;
   *) exit 1 ;;
 esac
