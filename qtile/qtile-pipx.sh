@@ -28,7 +28,7 @@ WAYLAND_BACKEND="NO"
 INSTALL_OPTDEPENDS="NO"
 INSTALL_EXTRAS="NO"
 
-read -p "Install Wayland backend? (y/N)" -n 1
+read -p "Install Wayland backend? (y/N)" -n 1 -r
 case "$REPLY" in 
   y|Y)
     if apt-cache show libwlroots-dev | grep -q 'Version: 0.16'; then
@@ -48,13 +48,13 @@ Runtime dependencies: ${depends[@]}
 Build dependencies: ${makedepends[@]}
 Optional dependencies: ${optdepends[@]}
 END
-read -p "Install optional dependencies? (y/N)" -n 1
+read -p "Install optional dependencies? (y/N)" -n 1 -r
 case "$REPLY" in 
   y|Y) INSTALL_OPTDEPENDS="YES" ;;
   *) ;;
 esac
 
-read -p "Install qtile-extras? (y/N)" -n 1
+read -p "Install qtile-extras? (y/N)" -n 1 -r
 case "$REPLY" in 
   y|Y) INSTALL_EXTRAS="YES" ;;
   *) ;;
@@ -65,7 +65,7 @@ This is what shall be installed with apt:
 Runtime dependencies: ${depends[@]}
 Build dependencies: ${makedepends[@]}
 END
-[[ INSTALL_OPTDEPENDS="YES" ]] && cat << END
+[[ $INSTALL_OPTDEPENDS="YES" ]] && cat << END
 Optional dependencies: ${optdepends[@]}
 END
 cat << END
@@ -76,7 +76,7 @@ Install optional dependencies: $INSTALL_OPTDEPENDS
 Install qtile-extras: $INSTALL_EXTRAS
 END
 
-read -p "Proceed? (y/N)" -n 1
+read -p "Proceed? (y/N)" -n 1 -r
 case "$REPLY" in 
   y|Y) ;;
   *) exit 1 ;;
@@ -84,11 +84,11 @@ esac
 
 echo "Starting installation..."
 mkdir -p /tmp/qtile-install
-pushd /tmp/qtile-install > /dev/null
+pushd /tmp/qtile-install > /dev/null || exit 1
 
 echo "Installing dependencies..."
 sudo apt install -y "${depends[@]}" "${makedepends[@]}"
-[[ INSTALL_OPTDEPENDS="YES" ]] && {
+[[ $INSTALL_OPTDEPENDS="YES" ]] && {
   echo "Installing optional dependencies..."
   sudo apt install -y "${optdepends[@]}"
 }
@@ -109,11 +109,11 @@ echo "Installing desktop files..."
 curl -O "https://raw.githubusercontent.com/qtile/qtile/master/resources/qtile.desktop"
 sudo install -Dm644 default_config.py -t /usr/share/doc/qtile
 sudo install -Dm644 qtile.desktop -t /usr/share/xsessions
-[[ WAYLAND_BACKEND="YES" ]] && {
+[[ $WAYLAND_BACKEND="YES" ]] && {
   curl -O "https://raw.githubusercontent.com/qtile/qtile/master/resources/qtile-wayland.desktop"
   sudo install -Dm644 qtile-wayland.desktop -t /usr/share/wayland-sessions
 }
 sudo ln -s /opt/venvs/qtile/bin/qtile /usr/bin/qtile
 
 echo "Success."
-popd > /dev/null
+popd > /dev/null || exit 1
