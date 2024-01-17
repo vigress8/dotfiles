@@ -65,7 +65,7 @@ This is what shall be installed with apt:
 Runtime dependencies: ${depends[@]}
 Build dependencies: ${makedepends[@]}
 END
-[[ $INSTALL_OPTDEPENDS="YES" ]] && cat << END
+[[ $INSTALL_OPTDEPENDS = "YES" ]] && cat << END
 Optional dependencies: ${optdepends[@]}
 END
 cat << END
@@ -88,7 +88,7 @@ pushd /tmp/qtile-install > /dev/null || exit 1
 
 echo "Installing dependencies..."
 sudo apt install -y "${depends[@]}" "${makedepends[@]}"
-[[ $INSTALL_OPTDEPENDS="YES" ]] && {
+[[ $INSTALL_OPTDEPENDS = "YES" ]] && {
   echo "Installing optional dependencies..."
   sudo apt install -y "${optdepends[@]}"
 }
@@ -100,7 +100,7 @@ PIPX_VARS=(
 )
 echo "Installing qtile..."
 sudo "${PIPX_VARS[@]}" pipx install --python python3.11 --system-site-packages 'qtile[all] @ https://github.com/qtile/qtile.git'
-[[ INSTALL_EXTRAS="YES" ]] && {
+[[ $INSTALL_EXTRAS = "YES" ]] && {
   echo "Installing qtile-extras..."
   sudo "${PIPX_VARS[@]}" pipx inject qtile 'qtile-extras @ https://github.com/elparaguayo/qtile-extras.git'
 }
@@ -109,7 +109,7 @@ echo "Installing desktop files..."
 curl -O "https://raw.githubusercontent.com/qtile/qtile/master/resources/qtile.desktop"
 sudo install -Dm644 default_config.py -t /usr/share/doc/qtile
 sudo install -Dm644 qtile.desktop -t /usr/share/xsessions
-[[ $WAYLAND_BACKEND="YES" ]] && {
+[[ $WAYLAND_BACKEND = "YES" ]] && {
   curl -O "https://raw.githubusercontent.com/qtile/qtile/master/resources/qtile-wayland.desktop"
   sudo install -Dm644 qtile-wayland.desktop -t /usr/share/wayland-sessions
 }
