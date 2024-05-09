@@ -186,7 +186,6 @@ require('lazy').setup({
       local servers = {
         bashls = {},
         clangd = {},
-        nil_ls = {},
         lua_ls = {
           settings = {
             Lua = {
@@ -212,13 +211,22 @@ require('lazy').setup({
         -- 'perltidy',
         -- 'shellcheck',
         -- 'shfmt',
-        'nixpkgs-fmt',
         'prettierd',
         'stylua',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('lspconfig').racket_langserver.setup {}
+      require('lspconfig').nixd.setup {
+        settings = {
+          nixd = {
+            formatting = {
+              command = { 'alejandra' },
+            },
+          },
+        },
+      }
+
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
@@ -259,6 +267,7 @@ require('lazy').setup({
         javascript = { 'prettierd' },
         javascriptreact = { 'prettierd' },
         lua = { 'stylua' },
+        nix = { 'alejandra' },
         perl = { 'perltidy' },
         rust = { 'rustfmt' },
         typescript = { 'prettierd' },
@@ -403,3 +412,4 @@ require('lazy').setup({
     },
   },
 })
+vim.cmd 'au BufRead,BufNewFile *.pacscript set ft=sh ts=2 sw=2 et'

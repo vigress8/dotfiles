@@ -1,7 +1,3 @@
--- You can add your own plugins here or in other files in this directory!
---  I promise not to create any merge conflicts in this directory :)
---
--- See the kickstart.nvim README for more information
 return {
   {
     'windwp/nvim-autopairs',
@@ -30,6 +26,9 @@ return {
     'folke/trouble.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {},
+    config = function()
+      vim.keymap.set('n', '<leader>tt', require('trouble').toggle, { desc = 'Toggle Trouble window' })
+    end,
   },
   {
     'Olical/conjure',
@@ -69,16 +68,5 @@ return {
     'mrcjkb/rustaceanvim',
     version = '^4', -- Recommended
     lazy = false, -- This plugin is already lazy
-  },
-  {
-    'ms-jpq/coq_nvim',
-    version = 'coq',
-    build = ':COQdeps',
-    dependencies = {
-      {
-        'ms-jpq/coq.artifacts',
-        version = 'artifacts',
-      },
-    },
   },
 }

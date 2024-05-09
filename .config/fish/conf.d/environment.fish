@@ -1,3 +1,7 @@
+if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+end
+
 set -gx EDITOR nvim
 set -gx PAGER nvimpager
 set -gx MANPAGER "nvim +Man!"
@@ -27,9 +31,10 @@ set -gx CABAL_DIR $XDG_DATA_HOME/cabal
 set -gx GHCUP_USE_XDG_DIRS 1
 set -gx STACK_XDG 1
 
-fish_add_path -P $XDG_BIN_HOME
-fish_add_path -P $CARGO_HOME/bin
-fish_add_path -P $XDG_CONFIG_HOME/emacs/bin
+fish_add_path -P --prepend $HOME/.nix-profile/bin
+fish_add_path -P --prepend $XDG_BIN_HOME
+fish_add_path -P --prepend $CARGO_HOME/bin
+fish_add_path -P --prepend $XDG_CONFIG_HOME/emacs/bin
 
 oh-my-posh init fish -c $XDG_CONFIG_HOME/fish/themes/catppuccin_latte.omp.json | source
 
