@@ -1,0 +1,9 @@
+#!/bin/sh
+
+case "$1" in
+  "-s" | "--single")
+    shift
+    printf '%s\n' "$@" | sed "s|\(.*\)|'\1'|g" | sort ;;
+  *)
+    printf '%s\n' "$@" | sed 's|\(.*\)|"\1"|g' | sort ;;
+esac

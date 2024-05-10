@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# https://stackoverflow.com/a/69827502
+set -euo pipefail
+
+while getopts f:t:m: opt; do
+    case "$opt" in
+        f) from="$OPTARG" ;;
+        t) to="$OPTARG"   ;;
+        m) msg="$OPTARG"  ;;
+        *) echo >&2 "Invalid option: $opt"
+           exit 1 ;;
+    esac
+    shift $((OPTIND - 1))
+done
+
+from="${from:-$(git rev-parse --abbrev-ref origin/HEAD | sed 's_^origin/__')}"
+to="${to:-$(git symbolic-ref --short HEAD)}"
+msg="${msg:-$(git log --reverse --format=%s "$from..$to" | head -1)}"
+temp=temp-$(date +%s)
+
+git checkout -b "$temp" "$from"
+git merge --squash "$to"
+git commit -m "$msg"
+git checkout "$to"
+git reset --hard "$temp"
+git branch -d "$temp"

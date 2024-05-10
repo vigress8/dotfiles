@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+diff -u "$2" <(perl -pe "$1" "$2") \
+    | perl -pe 'BEGIN { my $p };
+        m#^(?:---|\+\+\+) # and s#\t.*##;
+        s#^(---) /?(.+)#$1 a/$2# and $p = $2;
+        s#^(\+\+\+) .+#$1 b/$p#'
