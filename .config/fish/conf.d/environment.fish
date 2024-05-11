@@ -1,5 +1,5 @@
 function command_present
-  test -x $(command -v $argv[1])
+  test -x "$(command -v $argv[1])"
 end
 
 function set_if_present
