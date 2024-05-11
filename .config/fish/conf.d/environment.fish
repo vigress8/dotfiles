@@ -45,5 +45,8 @@ alias la      'eza --icons -a'
 alias ll      'eza --icons -l'
 alias lla     'eza --icons -la'
 alias ls      'eza --icons'
+if test -x "$(command -v yarnpkg)"
+  alias yarn yarnpkg
+end
 
 abbr --add discordo "discordo -token \$DISCORD_AUTH_TOKEN"

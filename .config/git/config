@@ -5,7 +5,8 @@
 	path = "alias"
 
 [credential "https://github.com"]
-	helper = "!/usr/bin/gh auth git-credential"
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
 
 [init]
 	defaultBranch = "main"
@@ -21,3 +22,6 @@
 	enable = true
 [push]
 	autoSetupRemote = true
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
