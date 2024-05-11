@@ -1,9 +1,19 @@
-if test -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
-  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+function command_present
+  test -x $(command -v $argv[1])
 end
 
-set -gx EDITOR nvim
-set -gx PAGER nvimpager
+function set_if_present
+  command_present $argv[2]; and set -gx $argv[1] $argv[2]
+end
+
+function source_if_present
+  test -f $argv[1]; and . $argv[1]
+end
+
+source_if_present /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
+
+set_if_present EDITOR nvim
+set_if_present PAGER nvimpager
 set -gx MANPAGER "nvim +Man!"
 
 set -gx XDG_CACHE_HOME $HOME/.cache
@@ -41,12 +51,12 @@ oh-my-posh init fish -c $XDG_CONFIG_HOME/fish/themes/catppuccin_latte.omp.json |
 alias g git
 alias v nvim
 alias wget    'wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
-alias la      'eza --icons -a'
-alias ll      'eza --icons -l'
-alias lla     'eza --icons -la'
-alias ls      'eza --icons'
-if test -x "$(command -v yarnpkg)"
-  alias yarn yarnpkg
+if command_present eza
+  alias la      'eza --icons -a'
+  alias ll      'eza --icons -l'
+  alias lla     'eza --icons -la'
+  alias ls      'eza --icons'
 end
+command_present yarnpkg; and alias yarn yarnpkg
 
 abbr --add discordo "discordo -token \$DISCORD_AUTH_TOKEN"
