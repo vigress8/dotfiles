@@ -36,3 +36,7 @@ shopt -s cdspell
 shopt -s dirspell
 shopt -s extglob
 shopt -s globstar
+export PATH=$XDG_BIN_HOME:$PATH
+if [[ -d $CARGO_HOME/env ]]; then
+  . "$CARGO_HOME/env"
+fi

@@ -6,7 +6,7 @@ local vimopts = {
   autoindent = true,
   breakindent = true,
   clipboard = 'unnamedplus',
-  cursorline = true,
+  cursorline = false,
   expandtab = true,
   hlsearch = true,
   ignorecase = true,
@@ -195,11 +195,6 @@ require('lazy').setup({
             },
           },
         },
-        hls = {
-          settings = {
-            haskell = { formattingProvider = 'fourmolu' },
-          },
-        },
         perlnavigator = {},
         pyright = {},
         tsserver = {},
@@ -207,11 +202,11 @@ require('lazy').setup({
       require('mason').setup()
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
-        -- 'fourmolu',
+        'fourmolu',
         -- 'perltidy',
-        -- 'shellcheck',
-        -- 'shfmt',
         'prettierd',
+        'shellcheck',
+        'shfmt',
         'stylua',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -224,6 +219,11 @@ require('lazy').setup({
               command = { 'alejandra' },
             },
           },
+        },
+      }
+      require('lspconfig').hls.setup {
+        settings = {
+          haskell = { formattingProvider = 'fourmolu' },
         },
       }
 
