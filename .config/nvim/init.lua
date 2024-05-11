@@ -412,4 +412,8 @@ require('lazy').setup({
     },
   },
 })
-vim.cmd 'au BufRead,BufNewFile *.pacscript set ft=sh ts=2 sw=2 et'
+vim.cmd [[
+  au BufRead,BufNewFile *.pacscript set ft=sh ts=2 sw=2 et
+  highlight RedundantSpaces ctermbg=red guibg=red
+  match RedundantSpaces /\s\+$/
+]]
