@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+set -e
+
+merged=$(git branch --merged upstream/master --no-contains master --format='%(refname:short)')
+[ -n "$merged" ] || exit
+for b in $merged; do
+    printf 'Deleting local branch %s\n' "$b"
+    git branch --delete "$b"
+    printf 'Deleting remote branch %s\n' "$b"
+    git push --delete origin "$b"
+done

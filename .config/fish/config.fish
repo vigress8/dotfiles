@@ -1,3 +1,5 @@
+umask go=
+
 test -f $HOME/.env; and source $HOME/.env
 source $HOME/.config/fish/conf.d/**
 
