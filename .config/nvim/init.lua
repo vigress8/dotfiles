@@ -46,6 +46,7 @@ setopts {
   autoindent = true,
   breakindent = true,
   clipboard = 'unnamedplus',
+  conceallevel = 2,
   cursorline = false,
   expandtab = true,
   hlsearch = true,

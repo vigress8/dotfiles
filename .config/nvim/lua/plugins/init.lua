@@ -54,31 +54,35 @@ return {
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
-      vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
-      vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
-      vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
-      vim.keymap.set('n', '<leader>/', function()
+      local map = function(keys, func, desc)
+        vim.keymap.set('n', '<leader>' .. keys, func, { desc = desc })
+      end
+
+      map('sh', builtin.help_tags, '[S]earch [H]elp')
+      map('sk', builtin.keymaps, '[S]earch [K]eymaps')
+      map('sf', builtin.find_files, '[S]earch [F]iles')
+      map('ss', builtin.builtin, '[S]earch [S]elect Telescope')
+      map('sw', builtin.grep_string, '[S]earch current [W]ord')
+      map('sg', builtin.live_grep, '[S]earch by [G]rep')
+      map('sd', builtin.diagnostics, '[S]earch [D]iagnostics')
+      map('sr', builtin.resume, '[S]earch [R]esume')
+      map('s.', builtin.oldfiles, '[S]earch Recent Files ("." for repeat)')
+      map('<leader>', builtin.buffers, '[ ] Find existing buffers')
+      map('/', function()
         builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
           winblend = 10,
           previewer = false,
         })
-      end, { desc = '[/] Fuzzily search in current buffer' })
-      vim.keymap.set('n', '<leader>s/', function()
+      end, '[/] Fuzzily search in current buffer')
+      map('s/', function()
         builtin.live_grep {
           grep_open_files = true,
           prompt_title = 'Live Grep in Open Files',
         }
-      end, { desc = '[S]earch [/] in Open Files' })
-      vim.keymap.set('n', '<leader>sn', function()
+      end, '[S]earch [/] in Open Files')
+      map('sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+      end, '[S]earch [N]eovim files')
     end,
   },
   {
@@ -122,7 +126,7 @@ return {
       })
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
-      local servers = {
+      local mason_servers = {
         bashls = {},
         clangd = {},
         lua_ls = {
@@ -139,7 +143,7 @@ return {
         tsserver = {},
       }
       require('mason').setup()
-      local ensure_installed = vim.tbl_keys(servers or {})
+      local ensure_installed = vim.tbl_keys(mason_servers or {})
       vim.list_extend(ensure_installed, {
         'fourmolu',
         -- 'perltidy',
@@ -150,28 +154,34 @@ return {
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      require('lspconfig').racket_langserver.setup {}
-      require('lspconfig').nixd.setup {
-        settings = {
-          nixd = {
-            formatting = {
-              command = { 'alejandra' },
+      local servers = {
+        racket_langserver = {},
+        nixd = {
+          settings = {
+            nixd = {
+              formatting = {
+                command = { 'alejandra' },
+              },
             },
           },
         },
-      }
-      require('lspconfig').hls.setup {
-        settings = {
-          haskell = { formattingProvider = 'fourmolu' },
+        hls = {
+          settings = {
+            haskell = { formattingProvider = 'fourmolu' },
+          },
         },
       }
+      local lspconfig = require 'lspconfig'
+      for server, opts in pairs(servers) do
+        lspconfig[server].setup(opts)
+      end
 
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
-            local server = servers[server_name] or {}
+            local server = mason_servers[server_name] or {}
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            lspconfig[server_name].setup(server)
           end,
         },
       }
