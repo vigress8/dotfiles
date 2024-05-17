@@ -34,8 +34,6 @@
             nixpkgs.flake = nixpkgs;
             home-manager.flake = home-manager;
           };
-        }
-        {
           home.sessionVariables.NIX_PATH = "home-manager=flake:home-manager:nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
         }
       ];

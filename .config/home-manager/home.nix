@@ -8,6 +8,7 @@
   home.stateVersion = "23.11";
   home.packages = with pkgs; [
     alejandra
+    cached-nix-shell
     nixd
   ];
 
