@@ -1,6 +1,6 @@
 umask go=
 
-test -f $HOME/.env; and source $HOME/.env
+test -f $HOME/.env; and fenv . $HOME/.env
 source $HOME/.config/fish/conf.d/**
 
 set hmvars $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
