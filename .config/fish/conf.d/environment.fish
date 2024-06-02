@@ -10,8 +10,6 @@ function source_if_present
   test -f $argv[1]; and . $argv[1]
 end
 
-source_if_present /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish
-
 set_if_present EDITOR nvim
 set_if_present PAGER nvimpager
 set -gx MANPAGER "nvim +Man!"
