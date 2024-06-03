@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/env cached-nix-shell
+#!nix-shell --pure -i bash
+#!nix-shell -p cacert curl gnutar jq libarchive
+
 set -euo pipefail
 here=$(dirname "$(readlink -f "$0")")
 
@@ -35,7 +38,9 @@ curl -fSL "${common_headers[@]}" \
   "$latest_url" -o lix.zip
 bsdtar -xf lix.zip
 mkdir -p lix && tar --strip=1 -xf lix-*.tar -C lix
-nix copy --all --from "file://$PWD/lix" --no-require-sigs --no-check-sigs
+sudo -i nix copy --all --from "file://$PWD/lix" --no-require-sigs --no-check-sigs
 
 read -r lix_path < lix/.lix-path
-nix upgrade-nix --store-path "$lix_path"
+sudo -i nix upgrade-nix --store-path "$lix_path"
+
+# vim: set ft=sh ts=2 sw=2 et:

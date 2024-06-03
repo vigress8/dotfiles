@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env cached-nix-shell
+#!nix-shell --pure -i bash
+#!nix-shell -p diffutils perl
 
 diff -u "$2" <(perl -pe "$1" "$2") \
     | perl -pe 'BEGIN { my $f };

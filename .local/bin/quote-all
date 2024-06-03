@@ -1,9 +1,8 @@
 #!/bin/sh
 
-case "$1" in
-  "-s" | "--single")
-    shift
-    printf '%s\n' "$@" | sed "s|\(.*\)|'\1'|g" | sort ;;
-  *)
-    printf '%s\n' "$@" | sed 's|\(.*\)|"\1"|g' | sort ;;
+case $1 in
+  -s | --single) shift && q=\' ;;
+  *) q=\" ;;
 esac
+
+awk -v q="$q" -- 'BEGIN {for (i=1; i<ARGC; i++) printf q "%s" q "\n", ARGV[i]}' "$@" | sort
