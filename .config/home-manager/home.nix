@@ -1,15 +1,11 @@
+{ config, pkgs, ... }:
 {
-  config,
-  pkgs,
-  ...
-}: {
   home.username = "v";
   home.homeDirectory = "/home/v";
   home.stateVersion = "23.11";
   home.packages = with pkgs; [
-    alejandra
     cached-nix-shell
-    nixd
+    rlwrap
   ];
 
   home.file = {
@@ -20,5 +16,9 @@
     # EDITOR = "emacs";
   };
 
-  programs.home-manager.enable = true;
+  programs = {
+    home-manager.enable = true;
+    direnv.enable = true;
+    direnv.nix-direnv.enable = true;
+  };
 }
