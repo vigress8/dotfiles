@@ -1,5 +1,6 @@
 { config, pkgs, ... }:
 {
+  imports = [ ./vscode.nix ];
   home.username = "v";
   home.homeDirectory = "/home/v";
   home.stateVersion = "23.11";
@@ -20,5 +21,9 @@
     home-manager.enable = true;
     direnv.enable = true;
     direnv.nix-direnv.enable = true;
+    vscode = {
+      enable = true;
+      package = pkgs.vscodium;
+    };
   };
 }

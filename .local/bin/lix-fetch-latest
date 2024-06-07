@@ -1,5 +1,5 @@
 #!/usr/bin/env cached-nix-shell
-#!nix-shell --pure -i bash
+#!nix-shell -i bash
 #!nix-shell -p cacert curl gnutar jq libarchive
 
 set -euo pipefail

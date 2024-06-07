@@ -7,21 +7,21 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    vc-extensions = {
+      url = "github:nix-community/nix-vscode-extensions";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
-    {
-      nixpkgs,
-      home-manager,
-      ...
-    }@inputs:
+    { nixpkgs, home-manager, ... }@inputs:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
       formatter = pkgs.nixfmt-rfc-style;
     in
     {
-      formatter.${system} = pkgs.nixfmt-rfc-style;
+      formatter.${system} = formatter;
       homeConfigurations."v" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
 
@@ -38,7 +38,7 @@
         ];
 
         extraSpecialArgs = {
-          inherit inputs;
+          inherit inputs system;
         };
       };
     };
