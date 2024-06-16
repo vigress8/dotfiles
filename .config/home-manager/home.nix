@@ -51,7 +51,7 @@
     eza.icons = true;
     fd.enable = true;
     neovim.enable = true;
-    neovim.extraLuaConfig = builtins.readFile ./init.lua;
+    neovim.extraLuaConfig = builtins.readFile ./common.lua;
     neovim.extraPackages = with pkgs; [
       #haskell-language-server
       nixd
