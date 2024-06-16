@@ -18,6 +18,8 @@
 
 [core]
 	pager = delta
+	untrackedCache = true
+	fsmonitor = true
 [delta]
 	navigate = true
 [diff]

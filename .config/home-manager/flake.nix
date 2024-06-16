@@ -7,10 +7,6 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    vc-extensions = {
-      url = "github:nix-community/nix-vscode-extensions";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -28,13 +24,6 @@
         modules = [
           ./home.nix
           { home.packages = [ formatter ]; }
-          {
-            nix.registry = {
-              nixpkgs.flake = nixpkgs;
-              home-manager.flake = home-manager;
-            };
-            home.sessionVariables.NIX_PATH = "home-manager=flake:home-manager:nixpkgs=flake:nixpkgs$\{NIX_PATH:+:$NIX_PATH}";
-          }
         ];
 
         extraSpecialArgs = {

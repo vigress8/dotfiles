@@ -1,8 +1,8 @@
-#!/usr/bin/env cached-nix-shell
+#!/usr/bin/env nix-shell
 #!nix-shell -i bash
 #!nix-shell -p cacert curl gnutar jq libarchive
 
-set -euo pipefail
+set -euxo pipefail
 here=$(dirname "$(readlink -f "$0")")
 
 common_headers=(

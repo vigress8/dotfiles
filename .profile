@@ -1,16 +1,14 @@
 # shellcheck shell=sh disable=2034
 
 prepend_paths() {
-    for d; do
-        [ -d "$d" ] || continue
-
+    for d_; do
+        [ -d "$d_" ] || continue
         case :$PATH: in
-        *:$d:*) ;;
-        *)
-            PATH=$d:$PATH
-            ;;
+        *:"$d_":*) ;;
+        *) PATH=$d_:$PATH ;;
         esac
     done
+    unset d_
 }
 
 set -o allexport
@@ -20,7 +18,6 @@ XDG_CONFIG_HOME=$HOME/.config
 XDG_DATA_HOME=$HOME/.local/share
 XDG_STATE_HOME=$HOME/.local/state
 XDG_BIN_HOME=$HOME/.local/bin
-HISTFILE=$XDG_STATE_HOME/bash/history
 
 if [ -x "$(command -v nvim)" ]; then
     EDITOR=nvim

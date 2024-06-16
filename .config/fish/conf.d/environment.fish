@@ -3,7 +3,7 @@ function command_present
 end
 
 alias g git
-alias v nvim
+command_present nvim; and alias v nvim
 alias wget    'wget --hsts-file="$XDG_DATA_HOME/wget-hsts"'
 if command_present eza
   alias la      'eza --icons -a'
