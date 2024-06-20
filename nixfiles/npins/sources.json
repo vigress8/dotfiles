@@ -1,0 +1,29 @@
+{
+  "pins": {
+    "home-manager": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "home-manager"
+      },
+      "branch": "master",
+      "revision": "d7830d05421d0ced83a0f007900898bdcaf2a2ca",
+      "url": "https://github.com/nix-community/home-manager/archive/d7830d05421d0ced83a0f007900898bdcaf2a2ca.tar.gz",
+      "hash": "1ypy47w1i5lhh970wpyfqqcml32xrwlmc114iw3cv3159g7qxa2a"
+    },
+    "nixpkgs": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "NixOS",
+        "repo": "nixpkgs"
+      },
+      "branch": "nixpkgs-unstable",
+      "revision": "37a45fb6993f14555f50b18fbcf4945b82a35707",
+      "url": "https://github.com/NixOS/nixpkgs/archive/37a45fb6993f14555f50b18fbcf4945b82a35707.tar.gz",
+      "hash": "1xr1n80biqiizylrcc6zx3kwl4293k825dy6a3qk0304xjgcyzpq"
+    }
+  },
+  "version": 3
+}

@@ -86,12 +86,14 @@ map('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 map('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 vim.cmd.colorscheme 'catppuccin'
+
+--[[
 local servers = {
   hls = {
     filetypes = { 'haskell', 'lhaskell', 'cabal' },
   },
   nixd = {},
-  -- ocamlls = {},
+  ocamlls = {},
   pyright = {},
   rust_analyzer = {},
 }
@@ -99,6 +101,7 @@ local servers = {
 for server, opts in pairs(servers) do
   require('lspconfig')[server].setup(opts)
 end
+]]--
 
 require('Comment').setup {}
 require('nvim-autopairs').setup {}
@@ -106,7 +109,4 @@ require('nvim-treesitter.configs').setup {
     auto_install = false,
     ensure_installed = {},
     highlight = { enable = true },
-}
-vim.g.coq_settings = {
-  auto_start = "shut-up",
 }

@@ -17,3 +17,5 @@ command_present fdfind; and alias fd fdfind
 command_present batcat; and alias bat batcat
 
 abbr --add discordo "discordo -token \$DISCORD_AUTH_TOKEN"
+
+direnv hook fish | source
