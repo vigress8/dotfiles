@@ -1,7 +1,13 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  pins,
+  ...
+}:
 {
   imports = [ ];
   nix.package = pkgs.lix;
+  nix.nixPath = lib.mapAttrsToList (k: v: "${k}=${v}") pins;
 
   home.username = "v";
   home.homeDirectory = "/home/v";
