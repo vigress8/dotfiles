@@ -1,13 +1,7 @@
 let
   self = {
     pins = import ./npins;
-    pkgs = import self.pins.nixpkgs {
-      config = {
-        allowBroken = true;
-        allowUnfree = true;
-      };
-      overlays = [ (_: prev: { neovim' = prev.wrapNeovim prev.neovim-unwrapped self.editors.neovim; }) ];
-    };
+    pkgs = import self.pins.nixpkgs { };
     inherit (self.pkgs) lib;
     editors.neovim = import ./editors/neovim self;
     shells = {
@@ -18,7 +12,12 @@ let
       haskell = import ./shells/haskell self;
       ocaml = import ./shells/ocaml self;
     };
-    v = import ./users/v self;
+    v = {
+      imports = [ ./users/v ];
+      _module.args = {
+        inherit self;
+      };
+    };
   };
 in
 self

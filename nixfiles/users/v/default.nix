@@ -1,23 +1,26 @@
 {
+  config,
   lib,
   pkgs,
-  pins,
+  self,
   ...
 }:
 let
-  inherit (import pins.nixGL { inherit pkgs; }) nixGLIntel;
+  inherit (import self.pins.nixGL { inherit pkgs; }) nixGLIntel;
 in
 {
   imports = [
-    (builtins.fetchurl {
-      url = "https://github.com/Smona/home-manager/raw/79a6027c4b4d1ce12e6a9e93b87c252aa1041c48/modules/misc/nixgl.nix";
-      sha256 = "14dkxynwizaabr58h409hv46gjg5v8y4pr6ww0lx62b58yr900hl";
-    })
+    ../../modules/nixgl.nix
   ];
   nixGL.prefix = lib.getExe nixGLIntel;
 
   nix.package = pkgs.lix;
-  nix.nixPath = lib.mapAttrsToList (k: v: "${k}=${v}") pins;
+  nix.nixPath = lib.mapAttrsToList (k: v: "${k}=${v}") self.pins;
+  nixpkgs = {
+    config.allowBroken = true;
+    config.allowUnfree = true;
+    overlays = [ (_: prev: { neovim' = prev.wrapNeovim prev.neovim-unwrapped self.editors.neovim; }) ];
+  };
 
   home.username = "v";
   home.homeDirectory = "/home/v";
@@ -53,7 +56,7 @@ in
     eza.icons = true;
     fd.enable = true;
     ripgrep.enable = true;
-    vscode.enable = true;
-    vscode.package = lib.nixGL.wrap pkgs.vscodium-fhs;
+    # vscode.enable = true;
+    # vscode.package = config.lib.nixGL.wrap pkgs.vscodium-fhs;
   };
 }
