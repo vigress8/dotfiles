@@ -12,6 +12,18 @@
       "url": "https://github.com/nix-community/home-manager/archive/d7830d05421d0ced83a0f007900898bdcaf2a2ca.tar.gz",
       "hash": "1ypy47w1i5lhh970wpyfqqcml32xrwlmc114iw3cv3159g7qxa2a"
     },
+    "nixGL": {
+      "type": "Git",
+      "repository": {
+        "type": "GitHub",
+        "owner": "nix-community",
+        "repo": "nixGL"
+      },
+      "branch": "main",
+      "revision": "310f8e49a149e4c9ea52f1adf70cdc768ec53f8a",
+      "url": "https://github.com/nix-community/nixGL/archive/310f8e49a149e4c9ea52f1adf70cdc768ec53f8a.tar.gz",
+      "hash": "1crnbv3mdx83xjwl2j63rwwl9qfgi2f1lr53zzjlby5lh50xjz4n"
+    },
     "nixpkgs": {
       "type": "Git",
       "repository": {

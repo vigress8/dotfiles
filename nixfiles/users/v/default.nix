@@ -4,8 +4,18 @@
   pins,
   ...
 }:
+let
+  inherit (import pins.nixGL { inherit pkgs; }) nixGLIntel;
+in
 {
-  imports = [ ];
+  imports = [
+    (builtins.fetchurl {
+      url = "https://github.com/Smona/home-manager/raw/79a6027c4b4d1ce12e6a9e93b87c252aa1041c48/modules/misc/nixgl.nix";
+      sha256 = "14dkxynwizaabr58h409hv46gjg5v8y4pr6ww0lx62b58yr900hl";
+    })
+  ];
+  nixGL.prefix = lib.getExe nixGLIntel;
+
   nix.package = pkgs.lix;
   nix.nixPath = lib.mapAttrsToList (k: v: "${k}=${v}") pins;
 
@@ -17,6 +27,7 @@
     cached-nix-shell
     nh
     nixfmt-rfc-style
+    nixGLIntel
     npins
     pre-commit
     rlwrap
@@ -42,5 +53,7 @@
     eza.icons = true;
     fd.enable = true;
     ripgrep.enable = true;
+    vscode.enable = true;
+    vscode.package = lib.nixGL.wrap pkgs.vscodium-fhs;
   };
 }
