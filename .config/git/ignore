@@ -1,4 +1,3 @@
-.venv
 personal_update.sh
-.nvchecker.toml
-.vscode/
+/.local
+/.gcroot

@@ -2,35 +2,25 @@
   config,
   lib,
   pkgs,
-  self,
+  inputs,
   ...
 }:
-let
-  inherit (import self.pins.nixGL { inherit pkgs; }) nixGLIntel;
-in
 {
-  imports = [
-    ../../modules/nixgl.nix
-  ];
-  nixGL.prefix = lib.getExe nixGLIntel;
+  imports = [ ];
 
-  nix.package = pkgs.lix;
-  nix.nixPath = lib.mapAttrsToList (k: v: "${k}=${v}") self.pins;
-  nixpkgs = {
-    config.allowBroken = true;
-    config.allowUnfree = true;
-    overlays = [ (_: prev: { neovim' = prev.wrapNeovim prev.neovim-unwrapped self.editors.neovim; }) ];
+  nix = {
+    package = pkgs.lix;
+    nixPath = lib.mapAttrsToList (n: v: "${n}=flake:${v}") inputs;
+    registry = builtins.mapAttrs (_: flake: { inherit flake; }) inputs;
   };
 
   home.username = "v";
   home.homeDirectory = "/home/v";
   home.stateVersion = "23.11";
   home.packages = with pkgs; [
-    neovim'
     cached-nix-shell
     nh
     nixfmt-rfc-style
-    nixGLIntel
     npins
     pre-commit
     rlwrap
@@ -48,15 +38,39 @@ in
 
   programs = {
     home-manager.enable = true;
-    bat.enable = true;
-    bat.config.map-syntax = [ "*.pacscript:Bash" ];
-    direnv.enable = true;
-    direnv.nix-direnv.enable = true;
-    eza.enable = true;
-    eza.icons = true;
+    bat = {
+      enable = true;
+      config.map-syntax = [ "*.pacscript:Bash" ];
+    };
+    direnv = {
+      enable = true;
+      nix-direnv.enable = true;
+    };
+    eza = {
+      enable = true;
+      icons = true;
+    };
     fd.enable = true;
+    fish = {
+      enable = true;
+      plugins = [
+        {
+          name = "foreign-env";
+          src = pkgs.fetchFromGitHub {
+            owner = "oh-my-fish";
+            repo = "plugin-foreign-env";
+            rev = "7f0cf099ae1e1e4ab38f46350ed6757d54471de7";
+            hash = "sha256-4+k5rSoxkTtYFh/lEjhRkVYa2S4KEzJ/IJbyJl+rJjQ=";
+          };
+        }
+      ];
+    };
+    nix-index.enable = true;
+    nix-index-database.comma.enable = true;
+    oh-my-posh = {
+      enable = true;
+      settings = lib.importJSON "${pkgs.oh-my-posh}/share/oh-my-posh/themes/catppuccin_latte.omp.json";
+    };
     ripgrep.enable = true;
-    # vscode.enable = true;
-    # vscode.package = config.lib.nixGL.wrap pkgs.vscodium-fhs;
   };
 }
