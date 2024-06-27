@@ -13,21 +13,8 @@ shopt -s dirspell
 shopt -s extglob
 shopt -s globstar
 
-prompt=(
-    # username@hostname
-    '\[\e[0;97m\]\[\e[90;1m\]\u@\h\[\e[0m\]'
-    # current working dir
-    '\w'
-    # fancy arrow
-    '\[\e[32;1m\]→ \[\e[0m\]'
-)
-
-if [ -n "$IN_NIX_SHELL" ]; then
-  prompt=('(nix-shell)' "${prompt[@]}")
-fi
-
 _prompt() {
-    local IFS=; export PS1=${prompt[*]}
+    export PS1='\[\e[0;97m\]\[\e[90;1m\]\u@\h\[\e[0m\] \w \[\e[32;1m\]→ \[\e[0m\]'
 }
 
 export -f _prompt

@@ -6,7 +6,7 @@
   ...
 }:
 {
-  imports = [ ];
+  imports = [ ../../modules/neovim ];
 
   nix = {
     package = pkgs.lix;
@@ -34,6 +34,12 @@
 
   home.sessionVariables = {
     # EDITOR = "emacs";
+  };
+
+  home.shellAliases = {
+    g = "git";
+    "..." = "cd ../..";
+    "...." = "cd ../../..";
   };
 
   programs = {
@@ -65,6 +71,7 @@
         }
       ];
     };
+    neovim.enable = true;
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
     oh-my-posh = {
