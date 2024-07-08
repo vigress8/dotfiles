@@ -20,6 +20,7 @@
 	pager = delta
 	untrackedCache = true
 	fsmonitor = true
+	compression = 9
 [delta]
 	navigate = true
 [diff]
@@ -45,3 +46,6 @@
 	writeReverseIndex = true
 [checkout]
 	workers = 0
+[http]
+	maxRequestBuffer = 100M
+	postBuffer = 1048576000

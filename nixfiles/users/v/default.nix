@@ -20,6 +20,7 @@
   home.packages = with pkgs; [
     cached-nix-shell
     nh
+    nixd
     nixfmt-rfc-style
     npins
     pre-commit
@@ -59,15 +60,13 @@
     fd.enable = true;
     fish = {
       enable = true;
+      shellInit = ''
+        umask u=rwx,go=rx
+      '';
       plugins = [
         {
           name = "foreign-env";
-          src = pkgs.fetchFromGitHub {
-            owner = "oh-my-fish";
-            repo = "plugin-foreign-env";
-            rev = "7f0cf099ae1e1e4ab38f46350ed6757d54471de7";
-            hash = "sha256-4+k5rSoxkTtYFh/lEjhRkVYa2S4KEzJ/IJbyJl+rJjQ=";
-          };
+          src = inputs.foreign-env.outPath;
         }
       ];
     };

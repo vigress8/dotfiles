@@ -1,4 +1,5 @@
 # shellcheck shell=sh disable=2034
+umask u=rwx,go=rx
 
 prepend_paths() {
     for d_; do

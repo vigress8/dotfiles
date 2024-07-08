@@ -14,6 +14,11 @@
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    foreign-env = {
+      url = "github:oh-my-fish/plugin-foreign-env";
+      flake = false;
+    };
   };
 
   outputs =

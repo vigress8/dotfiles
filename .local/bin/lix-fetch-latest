@@ -1,0 +1,45 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash
+#!nix-shell -p cacert curl gnutar jq libarchive
+# shellcheck shell=bash
+# vim: set ft=bash:
+
+set -euo pipefail
+: "$LIX_ARTIFACT_TOKEN"
+
+common_headers=(
+  -H 'Accept: application/vnd.github+json'
+  -H 'X-GitHub-Api-Version: 2022-11-28'
+)
+
+artifact_info_url=https://api.github.com/repos/vigress8/lix-snapshot/actions/artifacts
+artifact_info=$(curl -fsSL "${common_headers[@]}" "$artifact_info_url")
+
+latest=$(<<< "$artifact_info" jq -r '.artifacts | sort_by(.created_at | fromdate) | last')
+latest_url=$(<<< "$latest" jq -r .archive_download_url)
+latest_id=$(<<< "$latest" jq -r .id)
+
+current_idfile=${XDG_STATE_HOME:-$HOME/.local/state}/.current-lix-artifact-id
+if [[ ! -e $current_idfile ]]; then
+  echo "$latest_id" > "$current_idfile"
+fi
+read -r current_id < "$current_idfile"
+
+if [[ $latest_id == "$current_id" ]]; then
+  echo Up to date
+  exit 0
+fi
+
+echo "$latest_id" > "$current_idfile"
+temp=$(mktemp -d)
+trap 'rm -rf "$temp"' EXIT
+cd "$temp"
+curl -fSL "${common_headers[@]}" \
+  -H "Authorization: Bearer $LIX_ARTIFACT_TOKEN" \
+  "$latest_url" -o lix.zip
+bsdtar -xf lix.zip
+mkdir -p lix && tar --strip=1 -xf lix.tar -C lix
+cd lix
+sudo "$(command -v nix)" copy --all --from file://"$PWD"
+newpath=$(awk '/x86_64-linux/ {print $3}' .lix-paths)
+nix profile install "$newpath"
