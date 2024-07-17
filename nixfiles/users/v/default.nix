@@ -5,13 +5,16 @@
   inputs,
   ...
 }:
+let
+  flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
+in
 {
   imports = [ ../../modules/neovim ];
 
   nix = {
     package = pkgs.lix;
-    nixPath = lib.mapAttrsToList (n: v: "${n}=flake:${v}") inputs;
-    registry = builtins.mapAttrs (_: flake: { inherit flake; }) inputs;
+    nixPath = lib.mapAttrsToList (n: v: "${n}=flake:${v}") flakeInputs;
+    registry = builtins.mapAttrs (_: flake: { inherit flake; }) flakeInputs;
   };
 
   home.username = "v";
@@ -27,6 +30,7 @@
     rlwrap
     shellcheck
     shfmt
+    yt-dlp
   ];
 
   home.file = {
@@ -70,6 +74,7 @@
         }
       ];
     };
+    jujutsu.enable = true;
     neovim.enable = true;
     nix-index.enable = true;
     nix-index-database.comma.enable = true;

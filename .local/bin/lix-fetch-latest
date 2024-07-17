@@ -1,8 +1,8 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash
-#!nix-shell -p cacert curl gnutar jq libarchive
+#!nix-shell -p cacert coreutils curl gnutar jq libarchive
 # shellcheck shell=bash
-# vim: set ft=bash:
+# vim: set ft=bash ts=2 sw=2 et:
 
 set -euo pipefail
 : "$LIX_ARTIFACT_TOKEN"
@@ -21,7 +21,7 @@ latest_id=$(<<< "$latest" jq -r .id)
 
 current_idfile=${XDG_STATE_HOME:-$HOME/.local/state}/.current-lix-artifact-id
 if [[ ! -e $current_idfile ]]; then
-  echo "$latest_id" > "$current_idfile"
+  echo 0 > "$current_idfile"
 fi
 read -r current_id < "$current_idfile"
 
@@ -40,6 +40,8 @@ curl -fSL "${common_headers[@]}" \
 bsdtar -xf lix.zip
 mkdir -p lix && tar --strip=1 -xf lix.tar -C lix
 cd lix
-sudo "$(command -v nix)" copy --all --from file://"$PWD"
+sudo "$(command -v nix)" copy --all --from file://"$PWD" --no-require-sigs --no-check-sigs
 newpath=$(awk '/x86_64-linux/ {print $3}' .lix-paths)
-nix profile install "$newpath"
+oldpath=$(readlink -f "$(command -v nix)" | sed 's,/bin/nix$,,')
+old_priority=$(nix profile list --json | jq -r ".elements[] | select(.storePaths[0] == \"$oldpath\") | .priority")
+nix profile install "$newpath" --priority $((old_priority + 1))
