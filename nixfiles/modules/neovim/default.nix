@@ -23,6 +23,7 @@ lib.mkIf cfg.enable {
       nvim-autopairs
       nvim-lspconfig
       nvim-treesitter.withAllGrammars
+      rustaceanvim
     ];
   };
 }

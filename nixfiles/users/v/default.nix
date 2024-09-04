@@ -9,7 +9,7 @@ let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
 in
 {
-  imports = [ ../../modules/neovim ];
+  imports = [ /* ../../modules/neovim */ ];
 
   nix = {
     package = pkgs.lix;
