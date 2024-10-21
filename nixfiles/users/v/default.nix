@@ -9,7 +9,10 @@ let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
 in
 {
-  imports = [ /* ../../modules/neovim */ ];
+  imports =
+    [
+      # ../../modules/neovim
+    ];
 
   nix = {
     package = pkgs.lix;
@@ -59,7 +62,7 @@ in
     };
     eza = {
       enable = true;
-      icons = true;
+      icons = "auto";
     };
     fd.enable = true;
     fish = {
@@ -74,7 +77,46 @@ in
         }
       ];
     };
-    jujutsu.enable = true;
+    gh = {
+      enable = true;
+      gitCredentialHelper.enable = true;
+    };
+    git = {
+      enable = true;
+      delta = {
+        enable = true;
+        options.navigate = true;
+      };
+      extraConfig = {
+        core = {
+          untrackedCache = true;
+          fsmonitor = true;
+          compression = 9;
+        };
+        alias.clone-empty = "clone --filter=tree:0 --no-checkout --no-tags --depth=1 --sparse --shallow-submodules";
+        checkout.workers = 0;
+        feature.manyFiles = true;
+        fetch.prune = true;
+        http = {
+          maxRequestBuffer = 1048576000;
+          postBuffer = 1048576000;
+        };
+        init.defaultBranch = "main";
+        maintenance.gc.schedule = "daily";
+        merge.conflictStyle = "diff3";
+        pack.writeReverseIndex = true;
+        push.autoSetupRemote = true;
+        rerere.enable = true;
+	user = {
+	  email = "150687949+vigress8@users.noreply.github.com";
+          name = "vigress8";
+          signingKey = "AADBA9ABA5EDBDE3";
+	};
+      };
+      includes = [
+        { path = "alias"; }
+      ];
+    };
     neovim.enable = true;
     nix-index.enable = true;
     nix-index-database.comma.enable = true;
