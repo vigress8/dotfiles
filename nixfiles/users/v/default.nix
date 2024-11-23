@@ -28,11 +28,11 @@ in
     nh
     nixd
     nixfmt-rfc-style
-    npins
     pre-commit
     rlwrap
     shellcheck
     shfmt
+    yadm
     yt-dlp
   ];
 
