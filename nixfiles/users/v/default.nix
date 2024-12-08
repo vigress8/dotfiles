@@ -67,15 +67,15 @@ in
     fd.enable = true;
     fish = {
       enable = true;
-      shellInit = ''
-        umask u=rwx,go=rx
-      '';
       plugins = [
         {
           name = "foreign-env";
           src = inputs.foreign-env.outPath;
         }
       ];
+      shellInit = ''
+	umask u=rwx,go=
+      '';
     };
     gh = {
       enable = true;

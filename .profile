@@ -1,5 +1,5 @@
 # shellcheck shell=sh disable=2034
-umask u=rwx,go=rx
+umask u=rwx,go=
 
 prepend_paths() {
     for d_; do
@@ -19,6 +19,11 @@ XDG_CONFIG_HOME=$HOME/.config
 XDG_DATA_HOME=$HOME/.local/share
 XDG_STATE_HOME=$HOME/.local/state
 XDG_BIN_HOME=$HOME/.local/bin
+
+case :$XDG_DATA_DIRS: in
+    *:"$XDG_DATA_HOME":*) ;;
+    *) XDG_DATA_DIRS=$XDG_DATA_DIRS:$XDG_DATA_HOME ;;
+esac
 
 if [ -x "$(command -v nvim)" ]; then
     EDITOR=nvim
