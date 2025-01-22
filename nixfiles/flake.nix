@@ -64,7 +64,6 @@
         }:
         {
           _module.args.pkgs = nixpkgsFor system;
-          devShells = { };
         };
       flake = {
         homeConfigurations.v =

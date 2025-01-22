@@ -9,10 +9,7 @@ let
   flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
 in
 {
-  imports =
-    [
-      # ../../modules/neovim
-    ];
+  imports = [ ../../modules/neovim ];
 
   nix = {
     package = pkgs.lix;
@@ -74,7 +71,7 @@ in
         }
       ];
       shellInit = ''
-	umask u=rwx,go=
+        	umask u=rwx,go=
       '';
     };
     gh = {
@@ -107,11 +104,11 @@ in
         pack.writeReverseIndex = true;
         push.autoSetupRemote = true;
         rerere.enable = true;
-	user = {
-	  email = "150687949+vigress8@users.noreply.github.com";
+        user = {
+          email = "150687949+vigress8@users.noreply.github.com";
           name = "vigress8";
           signingKey = "AADBA9ABA5EDBDE3";
-	};
+        };
       };
       includes = [
         { path = "alias"; }
